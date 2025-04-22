@@ -1,15 +1,13 @@
 package org.example;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class TaskMethod {
 
     private Queue<Task> taskQueue;
 
     public TaskMethod() {
-    
+        taskQueue = new LinkedList<>();
     }
 
     public void taskInitialize() {
@@ -20,33 +18,38 @@ public class TaskMethod {
     }
 
     public void addTaskToQueue(Task task) {
- 
+        if (task == null) {
+            throw new IllegalArgumentException("Task cannot be null");
+        }
+        taskQueue.add(task);
     }
 
     public Task processNextTaskFromQueue() {
-  
+        return taskQueue.poll();
     }
 
     public Task peekAtNextTaskInQueue() {
-       
+        return taskQueue.peek();
     }
 
     public int getTaskQueueSize() {
-    
+        return taskQueue.size();
     }
 
     public List<Task> getTasksWithPriority(int priority) {
-
+        return taskQueue.stream().filter(task -> task.getPriority() == priority).collect(Collectors.toList());
     }
     
     public void moveTaskToBack(int numberOfPositions) {
-  
-    }
+        if (numberOfPositions <= 0 || numberOfPositions >= getTaskQueueSize()) {
+            throw new IllegalArgumentException();
+        }
 
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
+        Task taskToMove = taskQueue.poll();
+        List<Task> arrayList = new ArrayList<>(taskQueue);
+        arrayList.set(numberOfPositions - 1, taskToMove);
 
-
+        taskQueue.clear();
+        taskQueue.addAll(arrayList);
     }
 }
