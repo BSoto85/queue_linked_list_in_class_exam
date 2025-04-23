@@ -45,11 +45,9 @@ public class TaskMethod {
             throw new IllegalArgumentException();
         }
 
-        Task taskToMove = taskQueue.poll();
-        List<Task> arrayList = new ArrayList<>(taskQueue);
-        arrayList.set(numberOfPositions - 1, taskToMove);
-
-        taskQueue.clear();
-        taskQueue.addAll(arrayList);
+        for (int i = 0; i < numberOfPositions; i++) {
+            Task task = processNextTaskFromQueue();
+            taskQueue.add(task);
+        }
     }
 }
